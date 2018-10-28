@@ -1,5 +1,7 @@
 rootProject.name = "brave-kt"
 
+enableFeaturePreview("STABLE_PUBLISHING")
+
 pluginManagement {
     resolutionStrategy {
         val kotlinVersion: String by settings
