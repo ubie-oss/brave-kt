@@ -1,8 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.2.71"
+    kotlin("jvm")
     id("maven-publish")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 group = "app.ubie"
@@ -14,7 +15,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    val kotlinVersion: String by project
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.zipkin.brave:brave:5.5.0")
 
     val junitVersion = "5.3.0"
