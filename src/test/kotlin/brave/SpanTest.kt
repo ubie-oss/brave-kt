@@ -1,6 +1,10 @@
 package brave
 
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -43,7 +47,6 @@ class SpanTest {
             verify(exactly = 1) { span.start() }
             verify(exactly = 1) { span.finish() }
         }
-
     }
 
     @Nested
@@ -80,6 +83,5 @@ class SpanTest {
             verify(exactly = 1) { span.start(any()) }
             verify(exactly = 1) { span.finish() }
         }
-
     }
 }
