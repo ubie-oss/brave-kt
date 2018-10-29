@@ -3,11 +3,21 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     id("maven-publish")
+    id("jacoco")
     id("org.jlleitschuh.gradle.ktlint")
 }
 
 group = "app.ubie"
 version = "1.0.0"
+
+val test by tasks.getting(Test::class) {
+    useJUnitPlatform()
+    maxHeapSize = "3g"
+}
+
+jacoco {
+    toolVersion = "0.8.2"
+}
 
 repositories {
     jcenter()
