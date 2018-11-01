@@ -1,10 +1,13 @@
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    id("maven-publish")
     id("jacoco")
     id("org.jlleitschuh.gradle.ktlint")
+    id("maven")
+    id("signing")
+    id("org.jetbrains.dokka")
 }
 
 group = "app.ubie"
@@ -40,16 +43,88 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
+val dokka by tasks.getting(DokkaTask::class) {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+    jdkVersion = 8
+}
+
+val dokkaJar by tasks.creating(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    classifier = "javadoc"
+    from(dokka)
+}
+
+val sourcesJar by tasks.creating(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
     classifier = "sources"
     from(sourceSets["main"].allSource)
 }
 
-publishing {
-    publications {
-        register("mavenJava", MavenPublication::class) {
-            from(components["java"])
-            artifact(sourcesJar.get())
+artifacts.add("archives", dokkaJar)
+artifacts.add("archives", sourcesJar)
+
+signing {
+    isRequired = System.getenv("CI")?.toBoolean()?.not() ?: true
+    sign(configurations.archives)
+}
+
+val uploadArchives: Upload by tasks
+uploadArchives.apply {
+    repositories {
+        withConvention(MavenRepositoryHandlerConvention::class) {
+            mavenDeployer {
+                beforeDeployment {
+                    signing.signPom(this)
+                }
+
+                val username = if(project.hasProperty("sonatypeUsername")) project.properties["sonatypeUsername"] else System.getenv("sonatypeUsername")
+                val password = if(project.hasProperty("sonatypePassword")) project.properties["sonatypePassword"] else System.getenv("sonatypePassword")
+
+                withGroovyBuilder {
+                    "snapshotRepository"("url" to "https://oss.sonatype.org/content/repositories/snapshots") {
+                        "authentication"("userName" to username, "password" to password)
+                    }
+
+                    "repository"("url" to "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                        "authentication"("userName" to username, "password" to password)
+                    }
+                }
+
+                pom.project {
+                    withGroovyBuilder {
+                        "name"("brave-kt")
+                        "artifactId"("brave-kt")
+                        "packaging"("jar")
+                        "url"("https://github.com/ubie-inc/brave-kt")
+                        "description"("brave-kt is the library that adds Kotlin support to brave")
+                        "scm" {
+                            "connection"("scm:git:git://github.com/ubie-inc/brave-kt.git")
+                            "developerConnection"("scm:git:ssh://git@github.com:ubie-inc/brave-kt.git")
+                            "url"("https://github.com/ubie-inc/brave-kt")
+                        }
+                        "licenses" {
+                            "license" {
+                                "name"("The Apache Software License, Version 2.0")
+                                "url"("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                                "distribution"("repo")
+                            }
+                        }
+
+                        "developers" {
+                            "developer" {
+                                "id"("isogai-ubie")
+                                "name"("shiraji")
+                            }
+                        }
+
+                        "issueManagement" {
+                            "system"("github")
+                            "url"("https://github.com/ubie-inc/brave-kt/issues")
+                        }
+                    }
+                }
+            }
         }
     }
 }
