@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: Test
-          command: ./gradlew test jacocoTestReport
+          command: ./gradlew test jacocoTestReport --no-daemon --max-workers 2
 
       - store_test_results:
           path: build/test-results
