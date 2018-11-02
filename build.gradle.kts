@@ -97,7 +97,7 @@ uploadArchives.apply {
                         "artifactId"("brave-kt")
                         "packaging"("jar")
                         "url"("https://github.com/ubie-inc/brave-kt")
-                        "description"("brave-kt is the library that adds Kotlin support to brave")
+                        "description"("brave-kt is the library that adds Kotlin friendly API for brave")
                         "scm" {
                             "connection"("scm:git:git://github.com/ubie-inc/brave-kt.git")
                             "developerConnection"("scm:git:ssh://git@github.com:ubie-inc/brave-kt.git")

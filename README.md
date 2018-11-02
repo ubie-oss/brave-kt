@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/ubie-inc/brave-kt/tree/master.svg?style=svg)](https://circleci.com/gh/ubie-inc/brave-kt/tree/master)
 
-brave-kt is the library that adds Kotlin support to [brave](https://github.com/openzipkin/brave)
+brave-kt is the library that adds Kotlin friendly API for [brave](https://github.com/openzipkin/brave)
 
 ## How to use it
 
