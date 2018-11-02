@@ -8,7 +8,18 @@ brave-kt is the library that adds Kotlin friendly API for [brave](https://github
 
 ### Tracer with ScopedSpan
 
-Tracer#scopedSpan() methods starts and finishes ScopedSpan
+Previously,
+
+```
+val span = Tracing.currentTracer().startScopedSpan()
+try {
+    // whatever you want to do to trace with span
+} finally {
+    span.finish()
+}
+```
+
+Now we can do like this
 
 ```kotlin
 val result = tracer.scopedSpan("DB ACCESS") {
@@ -26,7 +37,18 @@ tracer.scopedSpan("DB ACCESS", startTimestamp) {
 
 ### Span
 
-Span#use method call start() and finish()
+Previously, 
+
+```
+span.start()
+try {
+    // whatever you want to do to trace with span
+} finally {
+    span.finish()
+}
+```
+
+Now we can do like this
 
 ```kotlin
 span.use {
