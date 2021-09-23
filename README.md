@@ -1,6 +1,6 @@
 # brave-kt
 
-[![CircleCI](https://circleci.com/gh/ubie-inc/brave-kt/tree/master.svg?style=svg)](https://circleci.com/gh/ubie-inc/brave-kt/tree/master)
+![](https://github.com/ubie-inc/brave-kt/actions/workflows/build.yml/badge.svg)
 
 brave-kt is the library that adds Kotlin friendly API for [brave](https://github.com/openzipkin/brave)
 
@@ -37,7 +37,7 @@ tracer.scopedSpan("DB ACCESS", startTimestamp) {
 
 ### Span
 
-Previously, 
+Previously,
 
 ```
 span.start()
@@ -83,4 +83,3 @@ dependencies {
     compile("app.ubie:brave-kt:1.0.0")
 }
 ```
-
